@@ -3,6 +3,7 @@ let books = require("./booksdb.js");
 let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
+// const axios = require('axios');
 
 const doesExist = (username)=> {
     let userswithsamename = users.filter((user)=>{
@@ -36,21 +37,37 @@ public_users.post("/register", (req,res) => {
 // Get the book list available in the shop
 public_users.get('/',function (req, res) {
   //Write your code here
-  res.send(books)
+
+  let getBook = new Promise((resolve, reject)=>
+    resolve(res.send(books))
+  )
+    getBook.then(()=>{
+        console.log("get book info")
+    })
+
 //   return res.status(300).json({message: "Yet to be implemented"});
 });
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
   //Write your code here
-  res.send(books[req.params.isbn])
-  return res.status(300).json({message: "Yet to be implemented"});
+  
+  let getBookIsbn = new Promise((resolve, reject) => {
+     resolve(res.send(books[req.params.isbn]))
+  })
+
+  getBookIsbn.then(()=> {
+      console.log("book info by isbn")
+  })
+  
+  // return res.status(300).json({message: "Yet to be implemented"});
  });
   
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
   //Write your code here
 //   return res.status(300).json({message: "Yet to be implemented"});
+    
     const author = req.params.author
     let books_selected = []
     for (var i in books) {
